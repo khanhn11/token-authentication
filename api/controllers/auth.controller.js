@@ -4,7 +4,7 @@ const getUser = async (username) => {
   return {
     userId: 123,
     password: "123456",
-    username
+    username,
   };
 };
 
@@ -13,7 +13,6 @@ exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   const user = await getUser(username);
-  console.log(password);
 
   if (user.password !== password) {
     return res.status(403).json({
@@ -30,6 +29,12 @@ exports.login = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
+  });
+
+  res.status(200).send({
+    username: user.username,
+    id: user.userId,
+    accessToken: token,
   });
 
   console.log("User is logged in successfully >>");
